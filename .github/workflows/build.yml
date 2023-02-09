@@ -9,7 +9,7 @@ on:
       - '**/*.md'
       - 'LICENSE'
   workflow_dispatch:
-  
+
 jobs:
   format:
     name: "Rust Format Check"
@@ -33,10 +33,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
+    needs: format
+    strategy:
+      matrix:
+        RUST: [stable]
+        TARGET:
+          - wasm32-unknown-unknown
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
-      
+
+      - name: "Rust Toolchain setup"
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.RUST }}
+          target: ${{ matrix.TARGET }}
+          override: true
+
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
