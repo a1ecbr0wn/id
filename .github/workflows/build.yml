@@ -34,11 +34,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     needs: format
-    strategy:
-      matrix:
-        RUST: [stable]
-        TARGET:
-          - wasm32-unknown-unknown
 
     steps:
       - name: "Checkout"
@@ -48,8 +43,6 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.RUST }}
-          target: ${{ matrix.TARGET }}
           override: true
 
       - name: Publish
