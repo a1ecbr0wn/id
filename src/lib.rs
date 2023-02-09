@@ -39,7 +39,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             } else {
                 Response::from_json(&json!({ "err": "no idea" }))
             }
-        })        
+        })
         .get("/version", |_, _| {
             let version = format!("v{}", env!("CARGO_PKG_VERSION"));
             Response::ok(version)

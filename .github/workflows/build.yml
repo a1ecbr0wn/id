@@ -8,7 +8,8 @@ on:
     paths-ignore:
       - '**/*.md'
       - 'LICENSE'
-
+  workflow_dispatch:
+  
 jobs:
   format:
     name: "Rust Format Check"
