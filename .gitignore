@@ -1,0 +1,21 @@
+# Build
+Cargo.lock
+/target
+/dist
+**/*.rs.bk
+wasm-pack.log
+
+# IDE
+/.vscode
+/.idea
+*.iml
+
+# Checksums
+*.sha
+*.md5
+
+# MacOS
+.DS_Store
+
+# node
+/node_modules
