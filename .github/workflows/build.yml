@@ -1,0 +1,42 @@
+---
+name: CI Build
+
+on:
+  push:
+    branches:
+      - 'github-workflow'
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+
+jobs:
+  format:
+    name: "Rust Format Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Rust Toolchain setup"
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            components: rustfmt
+            override: true
+
+      - name: "Format Check"
+        uses: mbrobbel/rustfmt-check@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
