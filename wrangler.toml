@@ -3,7 +3,6 @@ type = "rust"
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 routes = [
-    { pattern = "a1ecbr0wn.com", custom_domain = true },
     { pattern = "id.a1ecbr0wn.com", custom_domain = true }
 ]
 
