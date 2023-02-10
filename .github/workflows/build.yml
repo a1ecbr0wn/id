@@ -39,15 +39,15 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2
 
-      # - name: "Rust Toolchain setup"
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     profile: minimal
-      #     toolchain: stable
-          # override: true
+      - name: "Rust Toolchain setup"
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
 
-      # - run: |
-      #     cargo -V
+      - run: |
+          cargo -V
 
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
