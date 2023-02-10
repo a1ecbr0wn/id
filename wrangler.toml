@@ -4,7 +4,7 @@ main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 routes = [
     { pattern = "a1ecbr0wn.com", custom_domain = true },
-    { pattern = "gh.a1ecbr0wn.com", custom_domain = true },
+    # { pattern = "gh.a1ecbr0wn.com", custom_domain = true },
     { pattern = "id.a1ecbr0wn.com", custom_domain = true }
 ]
 
@@ -12,4 +12,4 @@ routes = [
 WORKERS_RS_VERSION = "0.0.11"
 
 [build]
-command = "cargo install -q worker-build --version 0.0.7 && worker-build --release"
+command = "cargo install -q worker-build --version 0.0.8 && worker-build --release"

@@ -50,7 +50,7 @@ jobs:
       #     cargo -V
 
       - name: Publish
-        uses: CodeCrowCorp/wrangler-rs-action@0.0.1
+        uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           # preCommands: rustc -V
