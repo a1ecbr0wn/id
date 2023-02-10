@@ -39,19 +39,8 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2
 
-      # - name: "Rust Toolchain setup"
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     profile: minimal
-      #     toolchain: stable
-      #     override: true
-
-      # - run: |
-      #     cargo -V
-
       - name: Publish
         uses: CodeCrowCorp/wrangler-rs-action@0.0.1
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           preCommands: rustup default stable
-          # preCommands: rustc -V
