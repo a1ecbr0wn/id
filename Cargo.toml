@@ -2,6 +2,11 @@
 name = "id-worker"
 version = "0.0.1"
 edition = "2021"
+description = "Cloudflare worker for providing ip address id"
+license = "Apache-2.0"
+repository = "https://github.com/a1ecbr0wn/id"
+readme = "README.md"
+categories = ["networking", "internet"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -11,8 +16,9 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 cfg-if = "1.0.0"
-worker = "0.0.9"
+worker = "0.0.11"
 serde_json = "1.0.93"
+wasm-bindgen = "^0.2.83"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
