@@ -4,7 +4,7 @@ name: CI Build
 on:
   push:
     branches:
-      - 'github-workflow'
+      - main
     paths-ignore:
       - '**/*.md'
       - 'LICENSE'
