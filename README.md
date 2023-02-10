@@ -4,7 +4,7 @@
 
 [Site: id.a1ecbr0wn.com](https://id.a1ecbr0wn.com)
 
-A simple ip address webservice using [Cloudflare's workers service](https://developers.cloudflare.com/workers/).
+A simple ip address webservice using [Cloudflare's workers service](https://developers.cloudflare.com/workers/).  For use by [r53-ddns](https://r53-ddns.noser.net/).
 
 This project uses the [`workers-rs`](https://github.com/cloudflare/workers-rs) crate to provide a simple rust WebAssembly binary that runs as a Cloudflare worker.  This is based off the standard [`worker-rust` template](https://github.com/cloudflare/templates/tree/main/worker-rust)
 
