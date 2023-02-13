@@ -1,6 +1,7 @@
 use serde_json::json;
 use worker::*;
 
+mod rate;
 mod utils;
 
 fn log_request(req: &Request) {
@@ -20,30 +21,39 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // Get more helpful error messages written to the console in the case of a panic.
     utils::set_panic_hook();
 
-    // Optionally, use the Router to handle matching endpoints, use ":name" placeholders, or "*name"
-    // catch-alls to match on specific patterns. Alternatively, use `Router::with_data(D)` to
-    // provide arbitrary data that will be accessible in each route via the `ctx.data()` method.
     let router = Router::new();
 
     router
-        .get("/", |req, _| {
-            if let Ok(Some(ip)) = req.headers().get("CF-Connecting-IP") {
-                Response::ok(ip)
-            } else {
-                Response::ok("no idea")
-            }
+        .get_async("/", |req, ctx| checked(req, ctx, |ip| Response::ok(ip)))
+        .get_async("/json", |req, ctx| {
+            checked(req, ctx, |ip| Response::from_json(&json!({ "ip": ip })))
         })
-        .get("/json", |req, _| {
-            if let Ok(Some(ip)) = req.headers().get("CF-Connecting-IP") {
-                Response::from_json(&json!({ "ip": ip }))
-            } else {
-                Response::from_json(&json!({ "err": "no idea" }))
-            }
-        })
-        .get("/version", |_, _| {
-            let version = format!("v{}", env!("CARGO_PKG_VERSION"));
-            Response::ok(version)
+        .get_async("/version", |req, ctx| {
+            checked(req, ctx, |_| {
+                let version = format!("v{}", env!("CARGO_PKG_VERSION"));
+                Response::ok(version)
+            })
         })
         .run(req, env)
         .await
+}
+
+// Check we have the ip header and check that the rate does not exceed the threshold
+async fn checked<F>(req: Request, ctx: RouteContext<()>, f: F) -> Result<Response>
+where
+    F: FnOnce(&str) -> Result<Response>,
+{
+    if let Ok(Some(ip)) = req.headers().get("CF-Connecting-IP") {
+        if let Ok(store) = ctx.kv("id") {
+            if let Err(x) = rate::rate_control(store, &ip).await {
+                Response::error(x, 429)
+            } else {
+                f(&ip)
+            }
+        } else {
+            Response::error("Service unavailable :(", 503)
+        }
+    } else {
+        Response::error("Missing header", 424)
+    }
 }

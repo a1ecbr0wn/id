@@ -5,6 +5,9 @@ compatibility_date = "2022-01-20"
 routes = [
     { pattern = "id.a1ecbr0wn.com", custom_domain = true }
 ]
+kv_namespaces = [
+    { binding = "id", id = "a2adaf2900e744a4b68f2dd248ceac52", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
+]
 
 [vars]
 WORKERS_RS_VERSION = "0.0.11"
