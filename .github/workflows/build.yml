@@ -44,3 +44,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           preCommands: rustup default stable
+
+      - name: "Show Shim"
+        run: |
+          ls -al build/worker/shim.mjs
+          cat build/worker/shim.mjs
