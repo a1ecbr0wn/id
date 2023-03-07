@@ -49,3 +49,5 @@ jobs:
         run: |
           ls -al build/worker/shim.mjs
           cat build/worker/shim.mjs
+          ls -al $XDG_CACHE_HOME
+          ~/.config/esbuild-* --version
