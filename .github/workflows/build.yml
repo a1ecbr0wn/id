@@ -42,7 +42,7 @@ jobs:
       - name: Publish
         uses: CodeCrowCorp/wrangler-rs-action@0.0.1
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           preCommands: rustup default stable
 
       - name: "Show Shim"
@@ -50,4 +50,3 @@ jobs:
           ls -al build/worker/shim.mjs
           cat build/worker/shim.mjs
           ls -al $XDG_CACHE_HOME
-          ~/.config/esbuild-* --version
