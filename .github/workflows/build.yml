@@ -50,3 +50,5 @@ jobs:
           ls -al build/worker/shim.mjs
           cat build/worker/shim.mjs
           ls -al $XDG_CACHE_HOME
+          npm view esbuild version
+          node_modules/esbuild/bin/esbuild --version
