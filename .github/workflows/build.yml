@@ -52,4 +52,3 @@ jobs:
           ls -al build/worker/
           cat build/worker/shim.mjs
           ls -al $XDG_CACHE_HOME
-          worker-build --version
