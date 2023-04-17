@@ -42,6 +42,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
+      - name: "Rust Toolchain setup"
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          components: rustfmt
+
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
