@@ -8,6 +8,12 @@ A simple ip address webservice using [Cloudflare's workers service](https://deve
 
 This project uses the [`workers-rs`](https://github.com/cloudflare/workers-rs) crate to provide a simple rust WebAssembly binary that runs as a Cloudflare worker.  This is based off the standard [`worker-rust` template](https://github.com/cloudflare/templates/tree/main/worker-rust)
 
+## Install Wrangler
+
+``` sh
+npm install -g wrangler
+```
+
 ## Deployment
 
 The project is built and deployed every time it is pushed to `main` via the `build.yml` github worflow, but it can also be deployed manually if you have [`wrangler` installed](https://developers.cloudflare.com/workers/get-started/guide/#1-install-wrangler-workers-cli) by running:
