@@ -34,6 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     needs: format
+    env:
+      NO_MINIFY: true
 
     steps:
       - name: "Checkout"
@@ -47,8 +49,6 @@ jobs:
 
       - name: "Show Shim"
         run: |
-          ls -al build/worker/shim.mjs
+          ls -al build/worker/
           cat build/worker/shim.mjs
           ls -al $XDG_CACHE_HOME
-          npm view esbuild version
-          node_modules/esbuild/bin/esbuild --version
