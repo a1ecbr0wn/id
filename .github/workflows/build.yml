@@ -47,7 +47,7 @@ jobs:
         with:
           toolchain: stable
           target: wasm32-unknown-unknown
-          components: rustfmt
+          components: cargo
 
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
