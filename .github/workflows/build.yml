@@ -4,7 +4,8 @@ name: CI Build
 on:
   push:
     branches:
-      - main
+      # - main
+      - change-toolkit
     paths-ignore:
       - '**/*.md'
       - 'LICENSE'
@@ -19,11 +20,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: "Rust Toolchain setup"
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
             toolchain: stable
+            target: wasm32-unknown-unknown
             components: rustfmt
-            override: true
 
       - name: "Format Check"
         uses: mbrobbel/rustfmt-check@master
@@ -42,10 +43,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Publish
-        uses: CodeCrowCorp/wrangler-rs-action@0.0.1
+        uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          preCommands: rustup default stable
 
       - name: "Show Shim"
         run: |
