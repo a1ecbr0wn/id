@@ -46,17 +46,17 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           target: wasm32-unknown-unknown
-      - run: cargo test --all-features
-      - uses: actions/setup-node@v3
-      - name: Install global npm dependencies
-        run: |
-          npm install -g wrangler
-      - run: cargo test --all-features
 
-      # - name: Publish
-      #   uses: cloudflare/wrangler-action@2.0.0
-      #   with:
-      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: "Build"
+        run: cargo build
+  
+      - name: "Setup Node"
+        uses: actions/setup-node@v3
+      - name: "Install wrangler dependency"
+        run: npm install wrangler
+
+      - name: "Build and publish"
+        run: wrangler publish --name=id --dry-run=true
 
       - name: "Show Shim"
         run: |
