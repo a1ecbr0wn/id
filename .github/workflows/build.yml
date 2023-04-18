@@ -4,8 +4,7 @@ name: CI Build
 on:
   push:
     branches:
-      # - main
-      - change-toolkit
+      - "**"
     paths-ignore:
       - '**/*.md'
       - 'LICENSE'
@@ -85,7 +84,7 @@ jobs:
 
       - name: Build wasm and publish dry run
         if: github.ref != 'refs/heads/main'
-        run: wrangler publish --name=id --dry-run=true
+        run: wrangler publish --name=id
 
       - name: Build wasm and publish
         if: github.ref == 'refs/heads/main'
