@@ -13,52 +13,79 @@ on:
 
 jobs:
   format:
-    name: "Rust Format Check"
+    name: Rust Format Check
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Rust Toolchain setup"
-        uses: dtolnay/rust-toolchain@master
+      - name: Rust Toolchain setup
+        uses: dtolnay/rust-toolchain@stable
         with:
-            toolchain: stable
-            target: wasm32-unknown-unknown
             components: rustfmt
 
-      - name: "Format Check"
+      - name: Format Check
         uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  clippy:
+    name: Run rust-clippy analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Rust Toolchain setup
+        uses: dtolnay/rust-toolchain@stable
+        with:
+            components: clippy
+
+      - name: Install required cargo
+        run: cargo install clippy-sarif sarif-fmt
+
+      - name: Run rust-clippy
+        run: cargo clippy --all-features --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        continue-on-error: true
+
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: rust-clippy-results.sarif
+          wait-for-processing: true
+          
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: format
+    needs: [format, clippy]
     env:
       NO_MINIFY: true
 
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Rust Toolchain setup"
+      - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
         with:
           target: wasm32-unknown-unknown
 
-      - name: "Build"
+      - name: Build rust code
         run: cargo build
   
-      - name: "Setup Node"
+      - name: Setup Node
         uses: actions/setup-node@v3
-      - name: "Install wrangler dependency"
-        run: npm install wrangler
 
-      - name: "Build and publish"
+      - name: Wrangler setup
+        run: npm install -g wrangler
+
+      - name: Build wasm and publish
         run: wrangler publish --name=id --dry-run=true
 
-      - name: "Show Shim"
+      - name: Show Shim
         run: |
           ls -al build/worker/
           cat build/worker/shim.mjs
