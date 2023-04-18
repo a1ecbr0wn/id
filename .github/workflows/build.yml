@@ -50,8 +50,8 @@ jobs:
       - uses: actions/setup-node@v3
       - name: Install global npm dependencies
         run: |
-          npm install -g wrangled
-          - run: cargo test --all-features
+          npm install -g wrangler
+      - run: cargo test --all-features
 
       # - name: Publish
       #   uses: cloudflare/wrangler-action@2.0.0
