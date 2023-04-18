@@ -47,11 +47,16 @@ jobs:
         with:
           target: wasm32-unknown-unknown
       - run: cargo test --all-features
+      - uses: actions/setup-node@v3
+      - name: Install global npm dependencies
+        run: |
+          npm install -g wrangled
+          - run: cargo test --all-features
 
-      - name: Publish
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # - name: Publish
+      #   uses: cloudflare/wrangler-action@2.0.0
+      #   with:
+      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: "Show Shim"
         run: |
