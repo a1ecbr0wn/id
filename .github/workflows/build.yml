@@ -61,8 +61,6 @@ jobs:
     name: Deploy
     # needs: [format, clippy]
     needs: format
-    env:
-      NO_MINIFY: true
 
     steps:
       - name: Checkout
