@@ -4,7 +4,7 @@ name: CI Build
 on:
   push:
     branches:
-      - main
+      - "**"
     paths-ignore:
       - '**/*.md'
       - 'LICENSE'
@@ -12,43 +12,77 @@ on:
 
 jobs:
   format:
-    name: "Rust Format Check"
+    name: Rust Format Check
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Rust Toolchain setup"
-        uses: actions-rs/toolchain@v1
+      - name: Rust Toolchain setup
+        uses: dtolnay/rust-toolchain@stable
         with:
-            toolchain: stable
             components: rustfmt
-            override: true
 
-      - name: "Format Check"
+      - name: Format Check
         uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  clippy:
+    name: Rust Clippy Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Rust Toolchain setup
+        uses: dtolnay/rust-toolchain@stable
+        with:
+            components: cargo, clippy
+
+      - name: clippy-sarif setup
+        run: cargo install clippy-sarif sarif-fmt
+
+      - name: Run rust-clippy
+        run: cargo clippy --all-features --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        continue-on-error: true
+
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: rust-clippy-results.sarif
+          wait-for-processing: true
+          
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: format
-    env:
-      NO_MINIFY: true
+    needs: [format, clippy]
 
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Publish
-        uses: CodeCrowCorp/wrangler-rs-action@0.0.1
+      - name: Rust Toolchain setup
+        uses: dtolnay/rust-toolchain@stable
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          preCommands: rustup default stable
+          target: wasm32-unknown-unknown
 
-      - name: "Show Shim"
-        run: |
-          ls -al build/worker/
-          cat build/worker/shim.mjs
-          ls -al $XDG_CACHE_HOME
+      - name: Build rust code
+        run: cargo build
+  
+      - name: Setup Node
+        uses: actions/setup-node@v3
+
+      - name: Wrangler setup
+        run: npm install -g wrangler
+
+      - name: Build wasm and publish dry run
+        if: github.ref != 'refs/heads/main'
+        run: wrangler publish --name=id --dry-run=true
+
+      - name: Build wasm and publish
+        if: github.ref == 'refs/heads/main'
+        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler publish --name=id
