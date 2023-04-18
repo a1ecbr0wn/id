@@ -59,8 +59,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    # needs: [format, clippy]
     needs: format
+    # needs: [format, clippy]
 
     steps:
       - name: Checkout
@@ -82,8 +82,9 @@ jobs:
 
       - name: Build wasm and publish dry run
         if: github.ref != 'refs/heads/main'
-        run: wrangler publish --name=id
+        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler publish --name=id
+        # run: wrangler publish --name=id --dry-run=true
 
       - name: Build wasm and publish
         if: github.ref == 'refs/heads/main'
-        run: wrangler publish --name=id --dry-run=true
+        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler publish --name=id
