@@ -30,7 +30,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   clippy:
-    name: Run rust-clippy analysis
+    name: Rust Clippy Check
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,9 +42,9 @@ jobs:
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
         with:
-            components: clippy
+            components: cargo, clippy
 
-      - name: Install required cargo
+      - name: clippy-sarif setup
         run: cargo install clippy-sarif sarif-fmt
 
       - name: Run rust-clippy
@@ -60,7 +60,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: [format, clippy]
+    # needs: [format, clippy]
+    needs: format
     env:
       NO_MINIFY: true
 
@@ -82,11 +83,10 @@ jobs:
       - name: Wrangler setup
         run: npm install -g wrangler
 
-      - name: Build wasm and publish
+      - name: Build wasm and publish dry run
+        if: github.ref != 'refs/heads/main'
         run: wrangler publish --name=id --dry-run=true
 
-      - name: Show Shim
-        run: |
-          ls -al build/worker/
-          cat build/worker/shim.mjs
-          ls -al $XDG_CACHE_HOME
+      - name: Build wasm and publish
+        if: github.ref == 'refs/heads/main'
+        run: wrangler publish --name=id --dry-run=true
