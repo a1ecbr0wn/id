@@ -14,7 +14,7 @@ routes = [
     { pattern = "test-id.a1ecbr0wn.com", custom_domain = true }
 ]
 kv_namespaces = [
-    { binding = "test-id", id = "79d9e5086960445abc089e9d753e0fb5" }
+    { binding = "id", id = "79d9e5086960445abc089e9d753e0fb5" }
 ]
 
 [vars]
