@@ -81,7 +81,7 @@ jobs:
 
       - name: Build wasm and publish dry run
         if: github.ref != 'refs/heads/main'
-        run: wrangler deploy --env test
+        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler deploy --env test
 
       - name: Build wasm and deploy
         if: github.ref == 'refs/heads/main'
