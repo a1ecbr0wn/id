@@ -1,24 +1,36 @@
-name = "id"
+name = "dev-id"
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
-routes = [
-    { pattern = "id.a1ecbr0wn.com", custom_domain = true }
-]
 kv_namespaces = [
-    { binding = "id", id = "a2adaf2900e744a4b68f2dd248ceac52", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
+    { binding = "id", id = "444fcce1202948d59b0d2a326933c413", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
+]
+vars = [
+    {ENVIRONMENT = "development"},
+    {WORKERS_RS_VERSION = "0.0.17"}
 ]
 
 [env.test]
 name = "test-id"
-routes = [
-    { pattern = "test-id.a1ecbr0wn.com", custom_domain = true }
-]
 kv_namespaces = [
-    { binding = "id", id = "79d9e5086960445abc089e9d753e0fb5" }
+    { binding = "id", id = "fc0265ceaccd4f52883b236f1fdaf489" }
+]
+vars = [
+    {ENVIRONMENT = "test"},
+    {WORKERS_RS_VERSION = "0.0.17"}
 ]
 
-[vars]
-WORKERS_RS_VERSION = "0.0.17"
+[env.prod]
+name = "prod-id"
+routes = [
+    { pattern = "id.a1ecbr0wn.com", custom_domain = true }
+]
+kv_namespaces = [
+    { binding = "id", id = "a2adaf2900e744a4b68f2dd248ceac52" }
+]
+vars = [
+    {ENVIRONMENT = "production"},
+    {WORKERS_RS_VERSION = "0.0.17"}
+]
 
 [build]
 command = "cargo install worker-build && worker-build --release"
