@@ -82,4 +82,4 @@ jobs:
         run: npm install -g wrangler
 
       - name: Build wasm and deploy
-        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler deploy
+        run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler deploy --env=prod
