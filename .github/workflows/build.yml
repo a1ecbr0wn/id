@@ -89,4 +89,5 @@ jobs:
           curl -s https://ident.me > idm.ip
           if ! cmp -zs test.ip idm.ip; then
             echo "::error title=Build Failure::IP addresses do not match"
+            exit 1
           fi
