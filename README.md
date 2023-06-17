@@ -33,5 +33,5 @@ npm run dev
 ## Usage
 
 ```sh
-curl id.a1ecbr0wn.com
+curl https://id.a1ecbr0wn.com
 ```

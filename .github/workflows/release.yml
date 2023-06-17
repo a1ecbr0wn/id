@@ -83,3 +83,12 @@ jobs:
 
       - name: Build wasm and deploy
         run: CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} wrangler deploy --env=prod
+
+      - name: Test the build
+        run: |
+          curl -s https://id.a1ecbr0wn.com > prod.ip
+          curl -s https://ident.me > idm.ip
+          if ! cmp -s prod.ip idm.ip; then
+          echo "::error title=Deploy Test Failure::IP addresses from id.a1ecbr0wn.com and ident.me do not match"
+            exit 1
+          fi
