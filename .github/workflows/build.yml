@@ -9,6 +9,8 @@ on:
       - '**/*.md'
       - 'LICENSE'
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
 
 jobs:
   # Check the rust formatting
