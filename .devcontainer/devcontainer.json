@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/rust
 {
-	"name": "Rust",
+	"name": "Rust-Wrangler",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/rust:0-1-bullseye",
+	"image": "alecbrown/rust-wrangler",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
