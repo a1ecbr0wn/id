@@ -18,16 +18,13 @@
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [8976],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "rustc --version",
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
-
 	// Use 'hostRequirements' to add requirements for the codespaces environment
 	"hostRequirements": {
-		"cpus": 4
+		"cpus": 2
 	}
 }

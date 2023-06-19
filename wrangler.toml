@@ -8,6 +8,7 @@ vars = [
     {ENVIRONMENT = "development"},
     {WORKERS_RS_VERSION = "0.0.17"}
 ]
+send_metrics = false
 
 [env.test]
 name = "test-id"
