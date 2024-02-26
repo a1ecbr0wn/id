@@ -1,10 +1,10 @@
 ---
-name: "Tag Release Build"
+name: Release Binaries on Tag
 
 on:
   push:
     tags:
-      - "v*"
+      - v*
   workflow_dispatch:
 
 env:
@@ -13,18 +13,18 @@ env:
 jobs:
   # Check the rust formatting
   format:
-    name: "Rust Format Check"
+    name: Rust Format Check
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: "Rust Toolchain setup"
+      - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
         with:
             components: rustfmt
 
-      - name: "Format Check"
+      - name: Format Check
         uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
@@ -52,20 +52,20 @@ jobs:
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: rust-clippy-results.sarif
           wait-for-processing: true
 
   # Deploy to the production environment
   deploy:
+    name: Deploy to the Production Environment
     runs-on: ubuntu-latest
-    name: Deploy
     needs: [format, clippy]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
