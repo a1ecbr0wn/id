@@ -1,12 +1,13 @@
 name = "dev-id"
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
+assets = "assets"
 kv_namespaces = [
     { binding = "id", id = "444fcce1202948d59b0d2a326933c413", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
 ]
 vars = [
     {ENVIRONMENT = "development"},
-    {WORKERS_RS_VERSION = "0.0.17"}
+    {WORKERS_RS_VERSION = "0.0.19"}
 ]
 send_metrics = false
 
@@ -17,7 +18,7 @@ kv_namespaces = [
 ]
 vars = [
     {ENVIRONMENT = "test"},
-    {WORKERS_RS_VERSION = "0.0.17"}
+    {WORKERS_RS_VERSION = "0.0.19"}
 ]
 
 [env.prod]
@@ -30,7 +31,7 @@ kv_namespaces = [
 ]
 vars = [
     {ENVIRONMENT = "production"},
-    {WORKERS_RS_VERSION = "0.0.17"}
+    {WORKERS_RS_VERSION = "0.0.19"}
 ]
 
 [build]
