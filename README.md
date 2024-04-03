@@ -19,7 +19,7 @@ npm install -g wrangler
 The project is built and deployed to the [test environment](https://test-id.a1ecbr0wn.workers.dev/) every time it is pushed via the `build.yml` github worflow, but it can also be deployed manually to the [dev environment](https://dev-id.a1ecbr0wn.workers.dev) if you have [`wrangler` installed](https://developers.cloudflare.com/workers/get-started/guide/#1-install-wrangler-workers-cli) by running:
 
 ```sh
-wrangler deploy
+wrangler deploy --env=test
 ```
 
 ## Testing
