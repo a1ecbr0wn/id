@@ -7,7 +7,7 @@ kv_namespaces = [
 ]
 vars = [
     {ENVIRONMENT = "development"},
-    {WORKERS_RS_VERSION = "0.1.0"}
+    {WORKERS_RS_VERSION = "0.2.0"}
 ]
 send_metrics = false
 
@@ -18,7 +18,7 @@ kv_namespaces = [
 ]
 vars = [
     {ENVIRONMENT = "test"},
-    {WORKERS_RS_VERSION = "0.1.0"}
+    {WORKERS_RS_VERSION = "0.2.0"}
 ]
 
 [env.prod]
@@ -31,7 +31,7 @@ kv_namespaces = [
 ]
 vars = [
     {ENVIRONMENT = "production"},
-    {WORKERS_RS_VERSION = "0.1.0"}
+    {WORKERS_RS_VERSION = "0.2.0"}
 ]
 
 [build]
