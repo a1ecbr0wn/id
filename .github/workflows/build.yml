@@ -93,5 +93,7 @@ jobs:
           curl -s https://ident.me > idm.ip
           if ! cmp -s test.ip idm.ip; then
             echo "::error title=Deploy Test Failure::IP addresses from test-id.a1ecbr0wn.workers.dev and ident.me do not match"
+            cat prod.ip
+            cat idm.ip
             exit 1
           fi
