@@ -89,6 +89,7 @@ jobs:
 
       - name: Test the build
         run: |
+          sleep 5000
           curl -s https://test-id.a1ecbr0wn.workers.dev > test.ip
           curl -s https://ident.me > idm.ip
           if ! cmp -s test.ip idm.ip; then
