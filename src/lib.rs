@@ -27,16 +27,32 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let router = Router::new();
 
     router
-        // .get("/", |_, _| Response::ok("Hello, World!"))
-        .get_async("/", |req, ctx| checked(req, ctx, |ip| Response::ok(ip)))
+        .get_async("/", |req, ctx| {
+            checked(
+                req,
+                ctx,
+                |ip| Response::ok(ip),
+                |msg, status| Response::error(msg, status),
+            )
+        })
         .get_async("/json", |req, ctx| {
-            checked(req, ctx, |ip| Response::from_json(&json!({ "ip": ip })))
+            checked(
+                req,
+                ctx,
+                |ip| Response::from_json(&json!({ "ip": ip })),
+                |msg, status| Response::from_json(&json!({ "status": status, "msg": msg })),
+            )
         })
         .get_async("/version", |req, ctx| {
-            checked(req, ctx, |_| {
-                let version = format!("v{}", env!("CARGO_PKG_VERSION"));
-                Response::ok(version)
-            })
+            checked(
+                req,
+                ctx,
+                |_| {
+                    let version = format!("v{}", env!("CARGO_PKG_VERSION"));
+                    Response::ok(version)
+                },
+                |msg, status| Response::error(msg, status),
+            )
         })
         .get("/hello", |_, _| Response::ok("Hello, World!"))
         .run(req, env)
@@ -45,23 +61,24 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 }
 
 // Check we have the ip header and check that the rate does not exceed the threshold
-async fn checked<F>(req: Request, ctx: RouteContext<()>, f: F) -> Result<Response>
+async fn checked<O, E>(req: Request, ctx: RouteContext<()>, o: O, e: E) -> Result<Response>
 where
-    F: FnOnce(&str) -> Result<Response>,
+    O: FnOnce(&str) -> Result<Response>,
+    E: FnOnce(&str, u16) -> Result<Response>,
 {
     if let Ok(Some(ip)) = req.headers().get("CF-Connecting-IP") {
         if let Ok(store) = ctx.kv("id") {
             if let Err(x) = rate::rate_control(store, &ip).await {
-                Response::error(x, 429)
+                e(&x, 429)
             } else {
-                f(&ip)
+                o(&ip)
             }
         } else {
-            Response::error("Service unavailable :(", 503)
+            e("Service unavailable :(", 503)
         }
     } else {
         console_log!("Missing 'CF-Connecting-IP' header");
         console_log!("{:?}", req.headers());
-        Response::error("Missing 'CF-Connecting-IP' header", 424)
+        e("Missing 'CF-Connecting-IP' header", 424)
     }
 }
