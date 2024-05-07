@@ -88,14 +88,14 @@ jobs:
 
       - name: Test the build
         run: |
-          sleep 10
+          sleep 15
           curl -s https://id.a1ecbr0wn.com > prod.ip
           curl -s https://ident.me > idm.ip
           if ! cmp -s prod.ip idm.ip; then
             echo "::error title=Deploy Test Failure::IP addresses from id.a1ecbr0wn.com and ident.me do not match"
-            echo "Prod Response:"
-            cat prod.ip
             echo "Control Response:"
             cat idm.ip
+            echo "Prod Response:"
+            cat prod.ip
             exit 1
           fi
