@@ -13,7 +13,7 @@ fn log_request(req: &Request) {
         req.cf()
             .unwrap()
             .region()
-            .unwrap_or_else(|| "unknown region".into())
+            .unwrap_or("unknown region".into())
     );
 }
 
@@ -27,6 +27,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let router = Router::new();
 
     router
+        // .get("/", |_, _| Response::ok("Hello, World!"))
         .get_async("/", |req, ctx| checked(req, ctx, |ip| Response::ok(ip)))
         .get_async("/json", |req, ctx| {
             checked(req, ctx, |ip| Response::from_json(&json!({ "ip": ip })))
@@ -37,8 +38,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 Response::ok(version)
             })
         })
+        .get("/hello", |_, _| Response::ok("Hello, World!"))
         .run(req, env)
         .await
+    // Response::ok("Hello, World!")
 }
 
 // Check we have the ip header and check that the rate does not exceed the threshold
@@ -57,6 +60,8 @@ where
             Response::error("Service unavailable :(", 503)
         }
     } else {
-        Response::error("Missing header", 424)
+        console_log!("Missing 'CF-Connecting-IP' header");
+        console_log!("{:?}", req.headers());
+        Response::error("Missing 'CF-Connecting-IP' header", 424)
     }
 }
