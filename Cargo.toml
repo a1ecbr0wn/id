@@ -1,6 +1,6 @@
 [package]
 name = "id-worker"
-version = "0.1.7-3"
+version = "0.1.7-4"
 edition = "2021"
 description = "Cloudflare worker for providing ip address id"
 license = "Apache-2.0"
