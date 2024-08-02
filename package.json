@@ -7,7 +7,7 @@
 		"dev": "wrangler dev --local"
 	},
 	"dependencies": {
-		"wrangler": "^3.53.1",
+		"wrangler": "^3.68.0",
 		"wrangler2": "^1.0.0"
 	}
 }
