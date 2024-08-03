@@ -1,7 +1,10 @@
 name = "dev-id"
 main = "build/worker/shim.mjs"
 compatibility_date = "2023-12-01"
-assets = "assets"
+rules = [
+  { type = "Data", globs = ["assets/favicon.ico], fallthrough = true }
+]
+
 kv_namespaces = [
     { binding = "id", id = "444fcce1202948d59b0d2a326933c413", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
 ]
