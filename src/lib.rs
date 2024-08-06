@@ -35,6 +35,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 |msg, status| Response::error(msg, status),
             )
         })
+        .get_async("/favicon.ico", |req, ctx| {
+            env.bucket(binding)
+            checked(
+                req,
+                ctx,
+                |ip| Response::ok(ip),
+                |msg, status| Response::error(msg, status),
+            )
+        })
         .get_async("/json", |req, ctx| {
             checked(
                 req,
