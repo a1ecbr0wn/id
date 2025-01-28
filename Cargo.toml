@@ -32,3 +32,6 @@ opt-level = "s"
 lto = true
 strip = true
 codegen-units = 1
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(wasm_bindgen_unstable_test_coverage)'] }
