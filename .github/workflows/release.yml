@@ -11,7 +11,17 @@ env:
   RUSTFLAGS: '--deny warnings'
 
 jobs:
-  # Check the rust formatting
+  signed:
+    name: Tag Signature Check
+    runs-on: ubuntu-latests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Tag is signed
+        run: git tag -v ${{ github.ref_name }}
+
+      # Check the rust formatting
   format:
     name: Rust Format Check
     runs-on: ubuntu-latest
@@ -61,7 +71,7 @@ jobs:
   deploy:
     name: Deploy to the Production Environment
     runs-on: ubuntu-latest
-    needs: [format, clippy]
+    needs: [signed, format, clippy]
 
     steps:
       - name: Checkout
