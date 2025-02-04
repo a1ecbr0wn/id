@@ -15,13 +15,14 @@ jobs:
     name: Tag Signature Check
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup git config
         run: |
           # setup gpg configuration
           git config user.signingkey ${{ secrets.SIGNINGKEYHASH }}
-
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Check Tag is signed
         run: git tag -v ${{ github.ref_name }}
