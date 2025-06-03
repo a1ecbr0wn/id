@@ -7,6 +7,7 @@ license = "Apache-2.0"
 repository = "https://github.com/a1ecbr0wn/id"
 readme = "README.md"
 categories = ["networking", "internet"]
+authors = [ "Δ ǀ Ξ ȼ <alec@noser.net>" ]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -30,7 +31,6 @@ console_error_panic_hook = { version = "0.1.7", optional = true }
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
 lto = true
-strip = true
 codegen-units = 1
 
 [lints.rust]
