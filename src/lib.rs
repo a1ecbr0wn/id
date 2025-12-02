@@ -48,7 +48,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 req,
                 ctx,
                 |_| {
-                    let version = format!("v{}", env!("CARGO_PKG_VERSION"));
+                    let version = format!(
+                        "v{} ({})",
+                        env!("CARGO_PKG_VERSION"),
+                        env!("GIT_HASH_SHORT")
+                    );
                     Response::ok(version)
                 },
                 |msg, status| Response::error(msg, status),
