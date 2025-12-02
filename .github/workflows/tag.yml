@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      actions: write
+      contents: read
 
     steps:
       - name: Check the version number from input
