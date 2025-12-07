@@ -1,4 +1,9 @@
 use serde_json::json;
+use tracing_subscriber::{
+    fmt::{format::Pretty, time::UtcTime},
+    prelude::*,
+};
+use tracing_web::{performance_layer, MakeConsoleWriter};
 use worker::*;
 
 mod rate;
@@ -15,6 +20,20 @@ fn log_request(req: &Request) {
             .region()
             .unwrap_or("unknown region".into())
     );
+}
+
+#[event(start)]
+fn start() {
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::fmt::layer()
+                .json()
+                .with_ansi(false) // Only partially supported across JavaScript runtimes
+                .with_timer(UtcTime::rfc_3339()) // std::time is not available in browsers
+                .with_writer(MakeConsoleWriter), // write events to the console
+        )
+        .with(performance_layer().with_details_from_fields(Pretty::default()))
+        .init();
 }
 
 #[event(fetch)]
@@ -59,9 +78,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             )
         })
         .get("/hello", |_, _| Response::ok("Hello, World!"))
+        .or_else_any_method("/:path", |req, _ctx| {
+            tracing::warn!( target: "Unexpected", "Unexpected call to URL {:?}, Headers: {:?}", req.url()?.to_string(), req.headers());
+            Response::ok("Not Found")
+        })
         .run(req, env)
         .await
-    // Response::ok("Hello, World!")
 }
 
 // Check we have the ip header and check that the rate does not exceed the threshold

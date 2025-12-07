@@ -13,6 +13,10 @@ send_metrics = false
 [build]
 command = "cargo install worker-build && worker-build --release"
 
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
+
 [env.test]
 name = "test-id"
 kv_namespaces = [
