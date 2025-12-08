@@ -78,6 +78,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             )
         })
         .get("/hello", |_, _| Response::ok("Hello, World!"))
+        .get("/robots.txt", |_, _| Response::ok("User-agent: *\nDisallow: /"))
         .or_else_any_method("/:path", |req, _ctx| {
             tracing::warn!( target: "Unexpected", "Unexpected call to URL {:?}, Headers: {:?}", req.url()?.to_string(), req.headers());
             Response::ok("Not Found")
