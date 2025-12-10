@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
@@ -63,7 +63,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: rust-clippy-results.sarif
-          wait-for-processing: true
+          wait-for-processing: false
 
   deploy:
     name: Deploy to the Test Environment
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Rust Toolchain setup
         uses: dtolnay/rust-toolchain@stable
