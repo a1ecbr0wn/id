@@ -54,7 +54,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 |msg, status| Response::error(msg, status),
             )
         })
-        .get_async("*/id", |req, ctx| {
+        .get_async("/id", |req, ctx| {
             checked(
                 req,
                 ctx,
@@ -62,7 +62,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 |msg, status| Response::error(msg, status),
             )
         })
-        .get_async("*/json", |req, ctx| {
+        .get_async("/json", |req, ctx| {
             checked(
                 req,
                 ctx,
