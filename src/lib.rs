@@ -54,7 +54,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 |msg, status| Response::error(msg, status),
             )
         })
-        .get_async("/json", |req, ctx| {
+        .get_async("*/id", |req, ctx| {
+            checked(
+                req,
+                ctx,
+                |ip| Response::ok(ip),
+                |msg, status| Response::error(msg, status),
+            )
+        })
+        .get_async("*/json", |req, ctx| {
             checked(
                 req,
                 ctx,
@@ -84,7 +92,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             let _ = icon_header.set("Content-Type", "image/x-icon");
             let image_bytes = Response::from_bytes(include_bytes!("../img/favicon.ico").to_vec());
             match image_bytes {
-                Ok(image) =>Ok(image.with_headers(icon_header)),
+                Ok(image) => Ok(image.with_headers(icon_header)),
                 Err(_) => Response::error("Not Found", 404),
             }
         })
