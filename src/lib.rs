@@ -85,7 +85,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 |msg, status| Response::error(msg, status),
             )
         })
-        .get("/hello", |_, _| Response::ok("Hello, World!"))
         .get("/robots.txt", |_, _| Response::ok("User-agent: *\nDisallow: /"))
         .get("/favicon.ico", |_, _| {
             let icon_header = Headers::new();
