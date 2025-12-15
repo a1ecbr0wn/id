@@ -129,48 +129,52 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             )
         })
         .get_async("/more-json", |req, ctx| {
-            let mut more = "".to_owned();
-            if let Ok(Some(user_agent)) = req.headers().get("User-Agent") {
-                more.push_str(&format!(r#", "User Agent": "{user_agent}""#));
-            }
-            if let Some(cf) = req.cf() {
-                more.push_str(&format!(r#", "http-protocol": "{}""#, cf.http_protocol()));
-                more.push_str(&format!(r#", "tls-version": "{}""#, cf.tls_version()));
-                more.push_str(&format!(r#", "tls-cipher": "{}""#, cf.tls_cipher()));
-                if let Some(asn) = cf.asn() {
-                    more.push_str(&format!(r#", "asn": "{asn}""#));
-                }
-                if let Some(organization) = cf.as_organization() {
-                    more.push_str(&format!(r#", "organization": "{organization}""#));
-                }
-                if let Some(coordinates) = cf.coordinates() {
-                    let (longitude, latitude) = coordinates;
-                    more.push_str(&format!(
-                        r#", "coordinates": [ "{longitude}", "{latitude}" ]"#
-                    ));
-                }
-                if let Some(city) = cf.city() {
-                    more.push_str(&format!(r#", "city": "{city}""#));
-                }
-                if let Some(region) = cf.region() {
-                    more.push_str(&format!(r#", "region": "{region}""#));
-                }
-                if let Some(region_code) = cf.region_code() {
-                    more.push_str(&format!(r#", "region-code": "{region_code}""#));
-                }
-                if let Some(postal_code) = cf.postal_code() {
-                    more.push_str(&format!(r#", "postal-code": "{postal_code}""#));
-                }
-                if let Some(country) = cf.country() {
-                    more.push_str(&format!(r#", "country": "{country}""#));
-                }
-                more.push_str(&format!(r#", "timezone": "{}""#, cf.timezone_name(),));
-            }
-
+            let user_agent = req.headers().get("User-Agent").ok().flatten().map(|s| s.to_string());
+            let cf_data = req.cf().cloned();
+            
             checked(
                 req,
                 ctx,
-                move |ip| Response::from_json(&format!(r#" {{ "ip": "{ip}" {more} }}"#)),
+                move |ip| {
+                    let mut more = json!({ "ip": ip });
+                    
+                    if let Some(user_agent) = user_agent {
+                        more["user_agent"] = json!(user_agent);
+                    }
+                    if let Some(cf) = cf_data {
+                        more["http_protocol"] = json!(cf.http_protocol());
+                        more["tls_version"] = json!(cf.tls_version());
+                        more["tls_cipher"] = json!(cf.tls_cipher());
+                        if let Some(asn) = cf.asn() {
+                            more["asn"] = json!(asn);
+                        }
+                        if let Some(organization) = cf.as_organization() {
+                            more["organization"] = json!(organization);
+                        }
+                        if let Some(coordinates) = cf.coordinates() {
+                            let (longitude, latitude) = coordinates;
+                            more["coordinates"] = json!([longitude, latitude]);
+                        }
+                        if let Some(city) = cf.city() {
+                            more["city"] = json!(city);
+                        }
+                        if let Some(region) = cf.region() {
+                            more["region"] = json!(region);
+                        }
+                        if let Some(region_code) = cf.region_code() {
+                            more["region_code"] = json!(region_code);
+                        }
+                        if let Some(postal_code) = cf.postal_code() {
+                            more["postal_code"] = json!(postal_code);
+                        }
+                        if let Some(country) = cf.country() {
+                            more["country"] = json!(country);
+                        }
+                        more["timezone"] = json!(cf.timezone_name());
+                    }
+                    
+                    Response::from_json(&more)
+                },
                 |msg, status| Response::error(msg, status),
             )
         })
