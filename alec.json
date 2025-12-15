@@ -1,0 +1,16 @@
+{
+  "ip": "80.229.19.177",
+  "User Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0",
+  "http-protocol": "HTTP/3",
+  "tls-version": "TLSv1.3",
+  "tls-cipher": "AEAD-AES128-GCM-SHA256",
+  "asn": "6871",
+  "organization": "PlusNet plc.",
+  "coordinates": ["51.52199", "0.5809"],
+  "city": "Canvey Island",
+  "region": "England",
+  "region-code": "ENG",
+  "postal-code": "SS8",
+  "country": "GB",
+  "timezone": "Europe/London"
+}
