@@ -162,7 +162,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     more.push_str(&format!(r#", "postal-code": "{postal_code}""#));
                 }
                 if let Some(country) = cf.country() {
-                    more.push_str(&format!(r#", "country": "{country}"#));
+                    more.push_str(&format!(r#", "country": "{country}""#));
                 }
                 more.push_str(&format!(r#", "timezone": "{}""#, cf.timezone_name(),));
             }
