@@ -129,16 +129,16 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             )
         })
         .get_async("/more-json", |req, ctx| {
-            let mut more = "{ ".to_owned();
+            let mut more = "".to_owned();
             if let Ok(Some(user_agent)) = req.headers().get("User-Agent") {
-                more.push_str(&format!(r#""User Agent": "{user_agent}""#));
+                more.push_str(&format!(r#", "User Agent": "{user_agent}""#));
             }
             if let Some(cf) = req.cf() {
                 more.push_str(&format!(r#", "http-protocol": "{}""#, cf.http_protocol()));
                 more.push_str(&format!(r#", "tls-version": "{}""#, cf.tls_version()));
                 more.push_str(&format!(r#", "tls-cipher": "{}""#, cf.tls_cipher()));
                 if let Some(asn) = cf.asn() {
-                    more.push_str(&format!(r#", "asn": "{asn}"#));
+                    more.push_str(&format!(r#", "asn": "{asn}""#));
                 }
                 if let Some(organization) = cf.as_organization() {
                     more.push_str(&format!(r#", "organization": "{organization}""#));
@@ -146,7 +146,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 if let Some(coordinates) = cf.coordinates() {
                     let (longitude, latitude) = coordinates;
                     more.push_str(&format!(
-                        r#", "coordinates": ["{longitude}", "{latitude}"]"#
+                        r#", "coordinates": [ "{longitude}", "{latitude}" ]"#
                     ));
                 }
                 if let Some(city) = cf.city() {
@@ -156,7 +156,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     more.push_str(&format!(r#", "region": "{region}""#));
                 }
                 if let Some(region_code) = cf.region_code() {
-                    more.push_str(&format!(r#", "region-code": "{region_code}"#));
+                    more.push_str(&format!(r#", "region-code": "{region_code}""#));
                 }
                 if let Some(postal_code) = cf.postal_code() {
                     more.push_str(&format!(r#", "postal-code": "{postal_code}""#));
@@ -166,7 +166,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 }
                 more.push_str(&format!(r#", "timezone": "{}""#, cf.timezone_name(),));
             }
-            more.push_str(" ]");
 
             checked(
                 req,
