@@ -129,15 +129,20 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             )
         })
         .get_async("/more-json", |req, ctx| {
-            let user_agent = req.headers().get("User-Agent").ok().flatten().map(|s| s.to_string());
+            let user_agent = req
+                .headers()
+                .get("User-Agent")
+                .ok()
+                .flatten()
+                .map(|s| s.to_string());
             let cf_data = req.cf().cloned();
-            
+
             checked(
                 req,
                 ctx,
                 move |ip| {
                     let mut more = json!({ "ip": ip });
-                    
+
                     if let Some(user_agent) = user_agent {
                         more["user_agent"] = json!(user_agent);
                     }
@@ -172,7 +177,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         }
                         more["timezone"] = json!(cf.timezone_name());
                     }
-                    
+
                     Response::from_json(&more)
                 },
                 |msg, status| Response::error(msg, status),
