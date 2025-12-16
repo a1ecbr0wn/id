@@ -94,7 +94,7 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          wrangler upload --name=prod-id --tag=${{ github.ref_name }}
+          wrangler versions upload --name=prod-id --tag=${{ github.ref_name }}
           export ID_VERSION=$(wrangler versions list --name=prod-id --json | jq -r '.[-1].id')
           wrangler versions deploy --name=prod-id --version-id=$ID_VERSION --yes
           export MSG="ID version ${{ github.ref_name }} uploaded and deployed to prod-id as ${ID_VERSION}"
