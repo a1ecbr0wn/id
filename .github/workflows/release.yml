@@ -99,7 +99,7 @@ jobs:
           wrangler versions deploy --name=prod-id --version-id=$ID_VERSION --yes
           export MSG="ID version ${{ github.ref_name }} uploaded and deployed to prod-id as ${ID_VERSION}"
           echo $MSG
-          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
+          curl -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
 
       - name: Test the build
         run: |
