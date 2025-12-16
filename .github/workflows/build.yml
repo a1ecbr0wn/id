@@ -96,7 +96,8 @@ jobs:
         run: |
           wrangler versions upload --name=test-id
           export TEST_ID_VERSION=$(wrangler versions list --name=test-id --json | jq -r '.[-1].id')
-          wrangler deploy --name=test-id --version=$TEST_ID_VERSION
+          wrangler versions deploy --name=test-id --version=$TEST_ID_VERSION
+          echo "ID version ${{ github.ref_name }} uploaded and deployed to test-id as ${ID_VERSION}"
 
       - name: Deploy and Test the build
         run: |
