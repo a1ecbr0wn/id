@@ -1,12 +1,8 @@
-name = "dev-id"
+name = "id"
 main = "build/worker/shim.mjs"
 compatibility_date = "2023-12-01"
-legacy_assets = "public"
 kv_namespaces = [
-    { binding = "id", id = "444fcce1202948d59b0d2a326933c413", preview_id = "79d9e5086960445abc089e9d753e0fb5" }
-]
-vars = [
-    {ENVIRONMENT = "development"},
+    { binding = "id", id = "a2adaf2900e744a4b68f2dd248ceac52" }
 ]
 send_metrics = false
 
@@ -16,27 +12,6 @@ command = "cargo install worker-build && worker-build --release"
 [observability]
 enabled = true
 head_sampling_rate = 1 # optional. default = 1.
-
-[env.test]
-name = "test-id"
-kv_namespaces = [
-    { binding = "id", id = "fc0265ceaccd4f52883b236f1fdaf489" }
-]
-vars = [
-    {ENVIRONMENT = "test"},
-]
-
-[env.prod]
-name = "prod-id"
-routes = [
-    { pattern = "id.a1ecbr0wn.com", custom_domain = true }
-]
-kv_namespaces = [
-    { binding = "id", id = "a2adaf2900e744a4b68f2dd248ceac52" }
-]
-vars = [
-    {ENVIRONMENT = "production"},
-]
 
 [placement]
 mode = "smart"

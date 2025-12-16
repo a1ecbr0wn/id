@@ -93,7 +93,10 @@ jobs:
       - name: Build wasm and deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: wrangler deploy --env=prod
+        run: |
+          wrangler upload --name=prod-id --tag=${{ github.ref_name }}
+          export ID_VERSION=$(wrangler versions list --name=prod-id --json | jq -r '.[-1].id')
+          wrangler deploy --name=prod-id --version=$TEST_ID_VERSION
 
       - name: Test the build
         run: |
