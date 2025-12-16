@@ -97,7 +97,9 @@ jobs:
           wrangler versions upload --name=test-id
           export TEST_ID_VERSION=$(wrangler versions list --name=test-id --json | jq -r '.[-1].id')
           wrangler versions deploy --name=test-id --version=$TEST_ID_VERSION
-          echo "ID version ${{ github.ref_name }} uploaded and deployed to test-id as ${ID_VERSION}"
+          export MSG="ID version ${{ github.ref_name }} uploaded and deployed to test-id as ${ID_VERSION}"
+          echo $MSG
+          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
 
       - name: Deploy and Test the build
         run: |
