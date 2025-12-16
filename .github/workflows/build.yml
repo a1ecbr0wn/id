@@ -90,12 +90,18 @@ jobs:
       - name: Wrangler setup
         run: npm install -g wrangler
 
-      - name: Build wasm and deploy
+      - name: Build wasm and upload
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: wrangler deploy --env=test
+        run: |
+          wrangler versions upload --name=test-id
+          export TEST_ID_VERSION=$(wrangler versions list --name=test-id --json | jq -r '.[-1].id')
+          wrangler versions deploy --name=test-id --version-id=$TEST_ID_VERSION --yes
+          export MSG="ID version from branch ${{ github.ref_name }} uploaded and deployed to test-id as ${TEST_ID_VERSION}"
+          echo $MSG
+          curl -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
 
-      - name: Test the build
+      - name: Deploy and Test the build
         run: |
           sleep 5
           curl -s https://test-id.a1ecbr0wn.workers.dev > test.ip

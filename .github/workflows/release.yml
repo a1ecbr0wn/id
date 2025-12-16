@@ -93,7 +93,13 @@ jobs:
       - name: Build wasm and deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: wrangler deploy --env=prod
+        run: |
+          wrangler upload --name=prod-id --tag=${{ github.ref_name }}
+          export ID_VERSION=$(wrangler versions list --name=prod-id --json | jq -r '.[-1].id')
+          wrangler versions deploy --name=prod-id --version-id=$ID_VERSION --yes
+          export MSG="ID version ${{ github.ref_name }} uploaded and deployed to prod-id as ${ID_VERSION}"
+          echo $MSG
+          curl -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
 
       - name: Test the build
         run: |
