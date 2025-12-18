@@ -37,7 +37,7 @@ jobs:
           echo "${{ secrets.SIGNINGKEY }}" | gpg --import
 
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup git config
         run: |
