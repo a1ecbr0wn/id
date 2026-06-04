@@ -150,7 +150,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         more["http_protocol"] = json!(cf.http_protocol());
                         more["tls_version"] = json!(cf.tls_version());
                         more["tls_cipher"] = json!(cf.tls_cipher());
-                        if let Some() = cf {}
                         if let Some(asn) = cf.asn() {
                             more["asn"] = json!(asn);
                         }
