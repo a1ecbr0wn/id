@@ -104,7 +104,7 @@ jobs:
       - name: Deploy and Test the build
         run: |
           sleep 5
-          curl -s https://test-id.a1ecbr0wn.workers.dev > test.ip
+          curl -s https://test-id.a1ecbr0wn.com > test.ip
           curl -s https://ident.me > idm.ip
           if ! cmp -s test.ip idm.ip; then
             echo "::error title=Deploy Test Failure::IP addresses from test-id.a1ecbr0wn.workers.dev and ident.me do not match"
