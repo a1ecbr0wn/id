@@ -99,16 +99,19 @@ jobs:
           wrangler versions deploy --name=test-id --version-id=$TEST_ID_VERSION --yes
           export MSG="ID version from branch ${{ github.ref_name }} uploaded and deployed to test-id as ${TEST_ID_VERSION}"
           echo $MSG
-          curl -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" https://discord.com/api/webhooks/1450559924898762824/gSkKN4fWZ1dQS84POSkW5-7fAvZaOiMNVwrCYcUJU3Yi4SM8Ns-fWbIt3wvLflbAEAiX
+          curl -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"$MSG\"}" ${{ secrets.CF_BOT }}
 
       - name: Deploy and Test the build
         run: |
           sleep 5
-          curl -s https://test-id.a1ecbr0wn.workers.dev > test.ip
+          curl -s https://test-id.a1ecbr0wn.com > test.ip
           curl -s https://ident.me > idm.ip
           if ! cmp -s test.ip idm.ip; then
             echo "::error title=Deploy Test Failure::IP addresses from test-id.a1ecbr0wn.workers.dev and ident.me do not match"
-            cat prod.ip
+            echo "Control Response:"
             cat idm.ip
+            echo ""
+            echo "Prod Response:"
+            cat prod.ip
             exit 1
           fi
